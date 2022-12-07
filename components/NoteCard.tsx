@@ -1,22 +1,22 @@
-import React, {FC, useState} from 'react';
+import React, {FC, useContext, useState} from 'react';
 import {
   Text,
   View,
   StyleSheet,
-  Image,
   TouchableOpacity,
   Dimensions,
 } from 'react-native';
 import FullNote from './FullNote';
 import GestureRecognizer from 'react-native-swipe-gestures';
 import DeleteButton from './DeleteButton';
-import colors from '../assets/colors';
 import {useAppDispatch} from '../redux/reduxStore';
 import {Note, removeNote} from '../redux/note/noteReducer';
 import {Comment} from '../redux/comment/commentReducer';
 import {setNote} from '../redux/note/singleNoteReducer';
 import {removeComments} from '../redux/comment/commentReducer';
 import {removeAnswers} from '../redux/answer/answerReducer';
+import Icon from './Icon';
+import {ThemeContext} from './ThemeProvider';
 
 interface NoteCardProps {
   note: Note;
@@ -26,6 +26,7 @@ interface NoteCardProps {
 const NoteCard: FC<NoteCardProps> = ({note, style, noteComments}) => {
   const [isOpen, setIsOpen] = useState(false);
   const [deleteButtonVisible, setDeleteButtonVisible] = useState(false);
+  const {colors, isDark} = useContext(ThemeContext);
   const dispatch = useAppDispatch();
 
   const openHandler = () => {
@@ -43,11 +44,20 @@ const NoteCard: FC<NoteCardProps> = ({note, style, noteComments}) => {
     <GestureRecognizer
       onSwipe={() => setDeleteButtonVisible(!deleteButtonVisible)}>
       <View style={style}>
-        <View style={styles.container}>
+        <View
+          style={[
+            styles.container,
+            {
+              borderColor: colors.borderCard,
+            },
+            isDark && {backgroundColor: colors.borderCard},
+          ]}>
           <View style={styles.textContainer}>
-            <Text style={styles.title}>{note.title}</Text>
-            <View style={styles.line} />
-            <Text style={styles.text}>
+            <Text style={[styles.title, {color: colors.text}]}>
+              {note.title}
+            </Text>
+            <View style={[styles.line, {borderRightColor: colors.text}]} />
+            <Text style={[styles.text, {color: colors.text}]}>
               {note.text.slice(0, 20)}
               {note.text.length > 20 && '...'}
             </Text>
@@ -58,10 +68,7 @@ const NoteCard: FC<NoteCardProps> = ({note, style, noteComments}) => {
             <TouchableOpacity
               onPress={openHandler}
               style={styles.iconContainer}>
-              <Image
-                source={require('../assets/arrow.png')}
-                style={isOpen ? styles.icon : {marginRight: 17}}
-              />
+              <Icon name="chevron-down" size={15} color={colors.text} />
             </TouchableOpacity>
           )}
         </View>
@@ -76,7 +83,6 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     height: 37,
-    borderColor: colors.borderCard,
     borderWidth: 1,
     borderRadius: 5,
     alignItems: 'center',
@@ -92,23 +98,16 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 14,
     fontWeight: '600',
-    color: colors.black,
   },
   text: {
     fontSize: 10,
     fontWeight: '300',
-    color: colors.black,
   },
   line: {
     height: 15,
     borderRightWidth: 0.5,
-    borderBottomColor: colors.black,
     marginRight: 9,
     marginLeft: 7,
-  },
-  icon: {
-    transform: [{rotate: '180deg'}],
-    marginRight: 17,
   },
   iconContainer: {
     height: 26,
@@ -116,6 +115,7 @@ const styles = StyleSheet.create({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
+    paddingRight: 17,
   },
 });
 

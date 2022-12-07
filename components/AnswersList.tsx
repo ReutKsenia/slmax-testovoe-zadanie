@@ -1,9 +1,9 @@
-import React, {FC, useState} from 'react';
+import React, {FC, useContext, useState} from 'react';
 import {View, StyleSheet, TouchableOpacity, Text} from 'react-native';
 import {Comment} from '../redux/comment/commentReducer';
 import AnswerCard from './AnswerCard';
 import {Answer} from '../redux/answer/answerReducer';
-import colors from '../assets/colors';
+import {ThemeContext} from './ThemeProvider';
 
 interface AnswersListProps {
   comment: Comment;
@@ -11,6 +11,7 @@ interface AnswersListProps {
 }
 const AnswersList: FC<AnswersListProps> = ({comment, answers}) => {
   const [showMore, setShowMore] = useState<boolean>(false);
+  const {colors} = useContext(ThemeContext);
 
   return (
     <>
@@ -29,13 +30,17 @@ const AnswersList: FC<AnswersListProps> = ({comment, answers}) => {
         <TouchableOpacity
           style={styles.showMoreContainer}
           onPress={() => setShowMore(true)}>
-          <Text style={styles.showMoreText}>–– Показать все ответы</Text>
+          <Text style={[styles.showMoreText, {color: colors.greyDate}]}>
+            –– Показать все ответы
+          </Text>
         </TouchableOpacity>
       ) : showMore ? (
         <TouchableOpacity
           style={styles.showMoreContainer}
           onPress={() => setShowMore(false)}>
-          <Text style={styles.showMoreText}>–– Скрыть ответы</Text>
+          <Text style={[styles.showMoreText, {color: colors.greyDate}]}>
+            –– Скрыть ответы
+          </Text>
         </TouchableOpacity>
       ) : (
         <></>
@@ -53,7 +58,6 @@ const styles = StyleSheet.create({
   showMoreText: {
     fontSize: 8,
     fontWeight: '600',
-    color: colors.greyDate,
   },
   showMoreContainer: {
     marginBottom: 10,

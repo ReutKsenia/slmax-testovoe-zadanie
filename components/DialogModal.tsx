@@ -1,6 +1,7 @@
-import React, {Dispatch, FC, SetStateAction} from 'react';
+import React, {Dispatch, FC, SetStateAction, useContext} from 'react';
 import {Modal, Pressable, StyleSheet, Text, View} from 'react-native';
-import colors from '../assets/colors';
+import {GENERAL} from '../assets/colors';
+import {ThemeContext} from './ThemeProvider';
 
 interface DialogModalProps {
   visible: boolean;
@@ -15,9 +16,11 @@ const DialogModal: FC<DialogModalProps> = ({
   title,
   children,
 }) => {
+  const {colors} = useContext(ThemeContext);
+
   return (
     <Modal visible={visible} animationType="fade" transparent={true}>
-      <View style={styles.background}>
+      <View style={{flex: 1, backgroundColor: colors.blurDark}}>
         <Pressable
           style={{
             flex: 1,
@@ -26,8 +29,14 @@ const DialogModal: FC<DialogModalProps> = ({
           onPress={() => {
             setVisible(false);
           }}>
-          <View style={styles.modalContainer}>
-            {title && <Text style={styles.text}>{title}</Text>}
+          <View
+            style={[
+              styles.modalContainer,
+              {backgroundColor: colors.background},
+            ]}>
+            {title && (
+              <Text style={[styles.text, {color: colors.text}]}>{title}</Text>
+            )}
             {children}
           </View>
         </Pressable>
@@ -37,12 +46,7 @@ const DialogModal: FC<DialogModalProps> = ({
 };
 
 const styles = StyleSheet.create({
-  background: {
-    flex: 1,
-    backgroundColor: colors.blurDark,
-  },
   modalContainer: {
-    backgroundColor: colors.white,
     borderRadius: 5,
     margin: 28,
     padding: 34,
@@ -50,7 +54,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   text: {
-    color: colors.black,
     textAlign: 'center',
     marginBottom: 15,
     fontSize: 15,

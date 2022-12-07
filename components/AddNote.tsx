@@ -1,12 +1,13 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {View, StyleSheet} from 'react-native';
-import colors from '../assets/colors';
 import {addNote} from '../redux/note/noteReducer';
 import {useAppDispatch} from '../redux/reduxStore';
 import AddInput from './AddInput';
+import {ThemeContext} from './ThemeProvider';
 
 const AddNote = () => {
   const dispatch = useAppDispatch();
+  const {colors} = useContext(ThemeContext);
 
   const addNoteHandler = (title: string, text: string) => {
     const newNote = {
@@ -19,7 +20,7 @@ const AddNote = () => {
   };
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, {borderColor: colors.borderCard}]}>
       <AddInput addFunc={addNoteHandler} />
     </View>
   );
@@ -29,7 +30,6 @@ const styles = StyleSheet.create({
   container: {
     display: 'flex',
     height: 82,
-    borderColor: colors.borderCard,
     borderWidth: 1,
     borderRadius: 5,
     alignItems: 'center',

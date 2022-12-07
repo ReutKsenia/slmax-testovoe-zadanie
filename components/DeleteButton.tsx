@@ -1,6 +1,7 @@
 import React, {FC, useEffect, useState} from 'react';
 import {Text, StyleSheet, TouchableOpacity, Image} from 'react-native';
-import colors from '../assets/colors';
+import {GENERAL} from '../assets/colors';
+import Icon from './Icon';
 
 interface DeleteButtonProps {
   deleteFunc: Function;
@@ -40,7 +41,7 @@ const DeleteButton: FC<DeleteButtonProps> = ({deleteFunc}) => {
           style={styles.timerButton}
           onPress={() => setTimerVisible(false)}>
           <Text style={styles.timerButtonText}>{time}</Text>
-          <Image source={require('../assets/timer.png')} />
+          <Icon name="rotate-ccw" size={30} color={GENERAL.white} />
         </TouchableOpacity>
       )}
     </>
@@ -49,31 +50,31 @@ const DeleteButton: FC<DeleteButtonProps> = ({deleteFunc}) => {
 
 const styles = StyleSheet.create({
   deleteButton: {
-    backgroundColor: colors.active,
+    backgroundColor: GENERAL.active,
     borderRadius: 5,
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
     paddingHorizontal: 23,
     height: 37,
-    color: colors.white,
+    color: GENERAL.white,
   },
   deleteButtonText: {
-    color: colors.white,
+    color: GENERAL.white,
   },
   timerButton: {
-    backgroundColor: colors.active,
+    backgroundColor: GENERAL.active,
     borderRadius: 5,
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
     paddingHorizontal: 10,
     height: 37,
-    color: colors.white,
+    color: GENERAL.white,
   },
   timerButtonText: {
     position: 'absolute',
-    color: colors.white,
+    color: GENERAL.white,
   },
 });
 

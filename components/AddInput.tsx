@@ -1,13 +1,13 @@
-import React, {FC, useState} from 'react';
+import React, {FC, useContext, useState} from 'react';
 import {
   View,
   StyleSheet,
-  Image,
   TouchableOpacity,
   TextInput,
   Dimensions,
 } from 'react-native';
-import colors from '../assets/colors';
+import Icon from './Icon';
+import {ThemeContext} from './ThemeProvider';
 
 interface AddInputProps {
   addFunc: Function;
@@ -15,6 +15,7 @@ interface AddInputProps {
 const AddInput: FC<AddInputProps> = ({addFunc}) => {
   const [title, setTitle] = useState<string>('');
   const [text, setText] = useState<string>('');
+  const {colors} = useContext(ThemeContext);
 
   const addNoteHandler = () => {
     if (title.trim().length > 0 && text.trim().length > 0) {
@@ -27,23 +28,26 @@ const AddInput: FC<AddInputProps> = ({addFunc}) => {
   return (
     <View>
       <TextInput
-        style={styles.inputTitle}
+        style={[
+          styles.inputTitle,
+          {borderBottomColor: colors.borderCard, color: colors.text},
+        ]}
         value={title}
         onChangeText={setTitle}
         maxLength={25}
         placeholder="Название"
-        placeholderTextColor={colors.black}
+        placeholderTextColor={colors.text}
       />
       <View style={styles.inputTextContainer}>
         <TextInput
-          style={styles.inputText}
+          style={[styles.inputText, {color: colors.text}]}
           value={text}
           onChangeText={setText}
           placeholder="Текст описание"
-          placeholderTextColor={colors.black}
+          placeholderTextColor={colors.text}
         />
         <TouchableOpacity style={styles.iconContainer} onPress={addNoteHandler}>
-          <Image source={require('../assets/arrow.png')} style={styles.icon} />
+          <Icon name="chevron-right" size={15} color={colors.text} />
         </TouchableOpacity>
       </View>
     </View>
@@ -57,7 +61,6 @@ const styles = StyleSheet.create({
     padding: 7,
     fontSize: 14,
     fontWeight: '600',
-    borderBottomColor: colors.borderCard,
     width: Dimensions.get('window').width - 94,
     marginTop: 8,
   },
@@ -71,7 +74,6 @@ const styles = StyleSheet.create({
     height: 40,
     fontSize: 10,
     fontWeight: '300',
-    color: colors.black,
     width: Dimensions.get('window').width - 122,
   },
   iconContainer: {
@@ -80,9 +82,6 @@ const styles = StyleSheet.create({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  icon: {
-    transform: [{rotate: '-90deg'}],
   },
 });
 

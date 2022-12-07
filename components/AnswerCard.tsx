@@ -1,4 +1,4 @@
-import React, {FC, useState} from 'react';
+import React, {FC, useContext, useState} from 'react';
 import {
   Text,
   View,
@@ -6,13 +6,13 @@ import {
   Dimensions,
   TouchableOpacity,
 } from 'react-native';
-import colors from '../assets/colors';
 import {Answer, setAnswer} from '../redux/answer/answerReducer';
 import {Comment} from '../redux/comment/commentReducer';
 import {addAnswer, setComment} from '../redux/comment/singleCommentReducer';
 import {useAppDispatch} from '../redux/reduxStore';
 import AddInput from './AddInput';
 import DialogModal from './DialogModal';
+import {ThemeContext} from './ThemeProvider';
 
 interface AnswerCardProps {
   answer: Answer;
@@ -20,6 +20,7 @@ interface AnswerCardProps {
 }
 const AnswerCard: FC<AnswerCardProps> = ({answer, comment}) => {
   const [modalVisible, setModalVisible] = useState(false);
+  const {colors} = useContext(ThemeContext);
   const dispatch = useAppDispatch();
 
   const openModalHandler = () => {
@@ -43,10 +44,10 @@ const AnswerCard: FC<AnswerCardProps> = ({answer, comment}) => {
   return (
     <View style={styles.container}>
       <View style={styles.contentContainer}>
-        <Text style={styles.title}>{answer.title}</Text>
-        <Text style={styles.text}>{answer.text}</Text>
+        <Text style={[styles.title, {color: colors.text}]}>{answer.title}</Text>
+        <Text style={[styles.text, {color: colors.text}]}>{answer.text}</Text>
         <View style={styles.bottomContainer}>
-          <Text style={styles.date}>
+          <Text style={[styles.date, {color: colors.greyDate}]}>
             {new Date(answer.date).toLocaleString('ru', {
               year: 'numeric',
               month: 'numeric',
@@ -59,7 +60,13 @@ const AnswerCard: FC<AnswerCardProps> = ({answer, comment}) => {
             })}
           </Text>
           <TouchableOpacity onPress={openModalHandler}>
-            <Text style={[styles.date, {fontWeight: '600'}]}>Ответить</Text>
+            <Text
+              style={[
+                styles.date,
+                {fontWeight: '600', color: colors.greyDate},
+              ]}>
+              Ответить
+            </Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -96,19 +103,16 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 10,
     fontWeight: '600',
-    color: colors.black,
     marginBottom: 5,
   },
   text: {
     fontSize: 8,
     fontWeight: '300',
-    color: colors.black,
     marginBottom: 5,
   },
   date: {
     fontSize: 7,
     fontWeight: '300',
-    color: colors.greyDate,
     marginRight: 10,
   },
 });
